@@ -1,0 +1,83 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: yvault
+    network: mainnet
+    source:
+      address: "0x19D3364A399d251E894aC732651be8B0E4e85001"
+      abi: yvault
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+        - Approval
+        - StrategyAdded
+        - StrategyReported
+        - UpdateGovernance
+        - UpdateManagement
+        - UpdateGuestList
+        - UpdateRewards
+        - UpdateDepositLimit
+        - UpdatePerformanceFee
+        - UpdateManagementFee
+        - UpdateGuardian
+        - EmergencyShutdown
+        - UpdateWithdrawalQueue
+        - StrategyUpdateDebtRatio
+        - StrategyUpdateRateLimit
+        - StrategyUpdatePerformanceFee
+        - StrategyMigrated
+        - StrategyRevoked
+        - StrategyRemovedFromQueue
+        - StrategyAddedToQueue
+      abis:
+        - name: yvault
+          file: ./abis/yvault.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+        - event: StrategyAdded(indexed address,uint256,uint256,uint256)
+          handler: handleStrategyAdded
+        - event: StrategyReported(indexed address,uint256,uint256,uint256,uint256,uint256,uint256,uint256)
+          handler: handleStrategyReported
+        - event: UpdateGovernance(address)
+          handler: handleUpdateGovernance
+        - event: UpdateManagement(address)
+          handler: handleUpdateManagement
+        - event: UpdateGuestList(address)
+          handler: handleUpdateGuestList
+        - event: UpdateRewards(address)
+          handler: handleUpdateRewards
+        - event: UpdateDepositLimit(uint256)
+          handler: handleUpdateDepositLimit
+        - event: UpdatePerformanceFee(uint256)
+          handler: handleUpdatePerformanceFee
+        - event: UpdateManagementFee(uint256)
+          handler: handleUpdateManagementFee
+        - event: UpdateGuardian(address)
+          handler: handleUpdateGuardian
+        - event: EmergencyShutdown(bool)
+          handler: handleEmergencyShutdown
+        - event: UpdateWithdrawalQueue(address[20])
+          handler: handleUpdateWithdrawalQueue
+        - event: StrategyUpdateDebtRatio(indexed address,uint256)
+          handler: handleStrategyUpdateDebtRatio
+        - event: StrategyUpdateRateLimit(indexed address,uint256)
+          handler: handleStrategyUpdateRateLimit
+        - event: StrategyUpdatePerformanceFee(indexed address,uint256)
+          handler: handleStrategyUpdatePerformanceFee
+        - event: StrategyMigrated(indexed address,indexed address)
+          handler: handleStrategyMigrated
+        - event: StrategyRevoked(indexed address)
+          handler: handleStrategyRevoked
+        - event: StrategyRemovedFromQueue(indexed address)
+          handler: handleStrategyRemovedFromQueue
+        - event: StrategyAddedToQueue(indexed address)
+          handler: handleStrategyAddedToQueue
+      file: ./src/mapping.ts
