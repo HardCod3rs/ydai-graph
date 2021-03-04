@@ -8,6 +8,7 @@ dataSources:
     source:
       address: "0x19D3364A399d251E894aC732651be8B0E4e85001"
       abi: yvault
+      startBlock: 11673762
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

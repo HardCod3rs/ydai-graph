@@ -1,4 +1,5 @@
 type Account @entity {
   id: ID!
   currentDeposit: BigInt!
+  currentDepositDAI: BigInt!
 }

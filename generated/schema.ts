@@ -50,4 +50,13 @@ export class Account extends Entity {
   set currentDeposit(value: BigInt) {
     this.set("currentDeposit", Value.fromBigInt(value));
   }
+
+  get currentDepositDAI(): BigInt {
+    let value = this.get("currentDepositDAI");
+    return value.toBigInt();
+  }
+
+  set currentDepositDAI(value: BigInt) {
+    this.set("currentDepositDAI", Value.fromBigInt(value));
+  }
 }

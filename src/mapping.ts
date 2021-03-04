@@ -26,8 +26,13 @@ import {
 import { Account } from "../generated/schema";
 
 const localAddress = "0x0000000000000000000000000000000000000000";
+const toEther = BigInt.fromI32(1000000).times(
+  BigInt.fromI32(1000000).times(BigInt.fromI32(1000000))
+);
 
 export function handleTransfer(event: Transfer): void {
+  let contract = yvault.bind(event.address);
+
   let entity = Account.load(event.transaction.from.toHex());
 
   // Entities only exist after they have been saved to the store;
@@ -44,6 +49,12 @@ export function handleTransfer(event: Transfer): void {
 
   if (event.params.receiver.toHexString() == localAddress)
     entity.currentDeposit = entity.currentDeposit.minus(event.params.value);
+
+  const pricePerShare = contract.pricePerShare();
+
+  entity.currentDepositDAI = entity.currentDeposit
+    .times(pricePerShare)
+    .div(toEther);
 
   entity.save();
 }
