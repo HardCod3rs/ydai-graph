@@ -39,10 +39,10 @@ export function handleTransfer(event: Transfer): void {
     entity.currentDeposit = BigInt.fromI32(0);
   }
 
-  if (event.params.sender.toString() == localAddress)
+  if (event.params.sender.toHexString() == localAddress)
     entity.currentDeposit = entity.currentDeposit.plus(event.params.value);
 
-  if (event.params.receiver.toString() == localAddress)
+  if (event.params.receiver.toHexString() == localAddress)
     entity.currentDeposit = entity.currentDeposit.minus(event.params.value);
 
   entity.save();
