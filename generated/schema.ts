@@ -59,4 +59,80 @@ export class Account extends Entity {
   set currentDepositDAI(value: BigInt) {
     this.set("currentDepositDAI", Value.fromBigInt(value));
   }
+
+  get currentRewards(): BigInt {
+    let value = this.get("currentRewards");
+    return value.toBigInt();
+  }
+
+  set currentRewards(value: BigInt) {
+    this.set("currentRewards", Value.fromBigInt(value));
+  }
+}
+
+export class Strategy extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Strategy entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Strategy entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Strategy", id.toString(), this);
+  }
+
+  static load(id: string): Strategy | null {
+    return store.get("Strategy", id) as Strategy | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get totalGain(): BigInt {
+    let value = this.get("totalGain");
+    return value.toBigInt();
+  }
+
+  set totalGain(value: BigInt) {
+    this.set("totalGain", Value.fromBigInt(value));
+  }
+
+  get totalLoss(): BigInt {
+    let value = this.get("totalLoss");
+    return value.toBigInt();
+  }
+
+  set totalLoss(value: BigInt) {
+    this.set("totalLoss", Value.fromBigInt(value));
+  }
+
+  get totalDebt(): BigInt {
+    let value = this.get("totalDebt");
+    return value.toBigInt();
+  }
+
+  set totalDebt(value: BigInt) {
+    this.set("totalDebt", Value.fromBigInt(value));
+  }
+
+  get debtRatio(): BigInt {
+    let value = this.get("debtRatio");
+    return value.toBigInt();
+  }
+
+  set debtRatio(value: BigInt) {
+    this.set("debtRatio", Value.fromBigInt(value));
+  }
 }

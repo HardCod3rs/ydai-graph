@@ -2,4 +2,13 @@ type Account @entity {
   id: ID!
   currentDeposit: BigInt!
   currentDepositDAI: BigInt!
+  currentRewards: BigInt!
+}
+
+type Strategy @entity {
+  id: ID!
+  totalGain: BigInt!
+  totalLoss: BigInt!
+  totalDebt: BigInt!
+  debtRatio: BigInt!
 }

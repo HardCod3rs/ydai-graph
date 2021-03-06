@@ -23,7 +23,7 @@ import {
   StrategyRemovedFromQueue,
   StrategyAddedToQueue,
 } from "../generated/yvault/yvault";
-import { Account } from "../generated/schema";
+import { Account, Strategy } from "../generated/schema";
 
 const localAddress = "0x0000000000000000000000000000000000000000";
 const toEther = BigInt.fromI32(1000000).times(
@@ -42,15 +42,21 @@ export function handleTransfer(event: Transfer): void {
 
     // Entity fields can be set using simple assignments
     entity.currentDeposit = BigInt.fromI32(0);
+    entity.currentRewards = BigInt.fromI32(0);
   }
 
-  if (event.params.sender.toHexString() == localAddress)
+  const pricePerShare = contract.pricePerShare();
+
+  if (event.params.sender.toHexString() == localAddress) {
     entity.currentDeposit = entity.currentDeposit.plus(event.params.value);
+    entity.currentRewards = entity.currentDeposit
+      .times(pricePerShare)
+      .div(toEther)
+      .minus(entity.currentRewards);
+  }
 
   if (event.params.receiver.toHexString() == localAddress)
     entity.currentDeposit = entity.currentDeposit.minus(event.params.value);
-
-  const pricePerShare = contract.pricePerShare();
 
   entity.currentDepositDAI = entity.currentDeposit
     .times(pricePerShare)
@@ -123,11 +129,25 @@ export function handleTransfer(event: Transfer): void {
 // - contract.nonces(...)
 // - contract.DOMAIN_SEPARATOR(...)
 
+export function handleStrategyReported(event: StrategyReported): void {
+  let entity = Strategy.load(event.transaction.from.toHex());
+
+  if (entity == null) {
+    entity = new Strategy(event.transaction.from.toHex());
+  }
+
+  // Params
+  entity.totalGain = event.params.totalGain;
+  entity.totalLoss = event.params.totalLoss;
+  entity.totalDebt = event.params.totalDebt;
+  entity.debtRatio = event.params.debtRatio;
+
+  entity.save();
+}
+
 export function handleApproval(event: Approval): void {}
 
 export function handleStrategyAdded(event: StrategyAdded): void {}
-
-export function handleStrategyReported(event: StrategyReported): void {}
 
 export function handleUpdateGovernance(event: UpdateGovernance): void {}
 
